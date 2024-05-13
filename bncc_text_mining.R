@@ -7,6 +7,7 @@ library(readr)
 #library(ggthemes)
 #library(ggplot2)
 library(readxl)
+library(tm)
 #install.packages("C:\\Users\\luiza\\Downloads\\wordcloud_2.6.zip", repos = NULL, type = "source")
 
 #Mineração
@@ -118,30 +119,3 @@ wordcloud(hab_text,min.freq=2,max.words=40, random.order=T, colors=formatacao)
 
 
 
-
-#Removendo palavras especificas e limpando novamente o corpus
-sintomas_text <- tm_map(sintomas_text, removeWords, c("dor"))
-sintomas_dtms <- removeSparseTerms(DocumentTermMatrix(sintomas_text) , 0.98) 
-
-
-sintomas_frequencia <- colSums(as.matrix(sintomas_dtms))   
-length(sintomas_frequencia) 
-
-sintomas_frequencia <- sort(colSums(as.matrix(sintomas_dtms)), decreasing=TRUE) 
-sintomas_frequencia
-
-#Convertendo a matriz de frequencia em dataframe para o plot
-sintomas_plot <- data.frame(word=names(sintomas_frequencia), freq=sintomas_frequencia)  
-sintomas_plot
-sintomas_plot$word <- gsub("paladar", "perda ou diminuição do paladar", sintomas_plot$word)
-sintomas_plot$word <- gsub("corpo", "dor no corpo", sintomas_plot$word)
-
-#Criando o grafico
-grafico <- ggplot(subset(sintomas_plot, sintomas_frequencia>800), aes(x = reorder(word, -freq), y = freq)) +
-  geom_bar(stat = "identity", fill = "blue", color = "black") + 
-  theme(axis.text.x=element_text(angle=45, hjust=1)) +
-  ggtitle("Outros sintomas mais frequentes") +
-  labs(y="Frequencia", x = "Sintomas")
-grafico   
-
-#wordcloud(names(sintomas_frequencia),sintomas_frequencia,min.freq=2,max.words=150, random.order=T, colors=formatacao)
