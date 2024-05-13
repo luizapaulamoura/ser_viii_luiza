@@ -18,27 +18,25 @@ library(tm)
 library(wordcloud)
 library(tidytext)
 
+# ler o df
 df <- read_xlsx("bncc_.xlsx")
 
 #view(df)
 glimpse(df)
 
+#filtrar somente habilidades
 habilidades <- df$HABILIDADES
 
 #view(habilidades)
 
 print(habilidades)
 
-#Produzir corpus
+# fazer corpus
 hab_text <- VCorpus(VectorSource(habilidades))
 print(hab_text)
 
-#Tratamento dos caracteres especiais
 
-#hab_text <- tm_map(hab_text,
- #                       content_transformer(function(x) iconv(x, to = 'UTF-8', sub = 'byte')))
-
-#tratamento cara caixa baixa
+# todos os caracteres em caixa baixa
 hab_text <- tm_map(hab_text, content_transformer(tolower))
 
 #tirar pontuação
@@ -63,15 +61,17 @@ wordcloud(hab_text,min.freq=2,max.words=40, random.order=T, colors=formatacao)
 #library(fpc)
 
 #####
-#Limpeza do texto com a Document Term Matrix
+# fazer matriz termo documento
 #hab_dtm <- DocumentTermMatrix(hab_text)   
 #print(hab_dtm)
 
-#sintomas_frequencia <- colSums(as.matrix(sintomas_dtm))   
+
+# frequência das palavraS
+#hab_frequencia <- colSums(as.matrix(hab_dtm))   
 #length(sintomas_frequencia) 
 #tail(bitcoin_frequencia,10)
 
-#Removendo termos espar?os
+# tirar termos esparÇos
 #hab_dtms <- removeSparseTerms(hab_dtm, 0.98) 
 #hab_dtm
 
@@ -81,11 +81,11 @@ wordcloud(hab_text,min.freq=2,max.words=40, random.order=T, colors=formatacao)
 #hab_frequencia <- sort(colSums(as.matrix(hab_dtms)), decreasing=TRUE) 
 #hab_frequencia
 
-#Convertendo a matriz de frequencia em dataframe para o plot
+#matriz de frequÊncia
 #hab_plot <- data.frame(word=names(hab_frequencia), freq=hab_frequencia)  
 #view(hab_plot)
 
-#Criando o grafico
+# plot
 #grafico <- ggplot(subset(hab_plot, hab_frequencia>10), aes(x = reorder(word, -freq), y = freq)) +
 #  geom_bar(stat = "identity") + 
 #  theme(axis.text.x=element_text(angle=45, hjust=1)) +
