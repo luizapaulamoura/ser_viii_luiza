@@ -4,6 +4,7 @@ library(wordcloud) # Função para criar uma nuvem de palavras
 library(magrittr)
 library(dplyr)
 library(ggplot2)
+library(tm)
 
 # Carregar o texto do PDF
 text <- pdf_text("./Introduction to Data Science_Curriculum_v 6.0.pdf")
